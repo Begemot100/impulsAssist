@@ -25,14 +25,13 @@
 </head>
 <body>
     <div class="chat-container">
-      <div id="chat-messages">
-          {% for message in chat_history %}
-            <div class="{% if message.role == 'user' %}user-message{% else %}assistant-message{% endif %}">
-              {{ message.content }}
-            </div>
-          {% endfor %}
+        <div id="chat-messages">
+            {% for message in chat_history %}
+                <div class="{% if message.role == 'user' %}user-message{% else %}assistant-message{% endif %}">
+                    {{ message.content }}
+                </div>
+            {% endfor %}
         </div>
-
 
         <form id="chat-form" class="chat-form" onsubmit="sendMessage(event)">
             <input type="text" id="userInput" name="message" placeholder="Введите сообщение..." autocomplete="off" required>
@@ -42,46 +41,57 @@
     </div>
 
     <script>
-        function sendMessage(event) {
-            event.preventDefault();  // Останавливаем стандартную отправку формы
+        async function sendMessage(event) {
+            event.preventDefault(); // Остановить отправку формы
 
             const userInput = document.getElementById('userInput');
-            const userMessage = userInput.value.trim();
+            const message = userInput.value.trim();
 
-            if (userMessage === '') {
-                return;
-            }
+            if (message === '') return;
 
-            // Прячем кнопку отправки и показываем спиннер
+            // Прячем кнопку, показываем спиннер
             document.getElementById('sendButton').style.display = 'none';
             document.getElementById('loadingSpinner').style.display = 'inline-block';
 
-            fetch('/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'message=' + encodeURIComponent(userMessage),
-            })
-            .then(response => response.text())
-            .then(data => {
-                document.open();
-                document.write(data);
-                document.close();
-            })
-            .catch(error => {
-                console.error('Ошибка при отправке сообщения:', error);
-                alert('Произошла ошибка при отправке сообщения.');
-            })
-            .finally(() => {
-                document.getElementById('sendButton').style.display = 'inline-block';
-                document.getElementById('loadingSpinner').style.display = 'none';
-            });
+            // Добавляем сообщение пользователя сразу на страницу
+            const chatMessages = document.getElementById('chat-messages');
+            const userDiv = document.createElement('div');
+            userDiv.className = 'user-message';
+            userDiv.innerText = message;
+            chatMessages.appendChild(userDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
 
             userInput.value = '';
+
+            // Отправляем сообщение на сервер
+            try {
+                const response = await fetch('/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'message=' + encodeURIComponent(message)
+                });
+
+                if (response.ok) {
+                    const text = await response.text();
+                    // Перезагружаем страницу, чтобы получить ответ ассистента
+                    document.open();
+                    document.write(text);
+                    document.close();
+                } else {
+                    alert('Ошибка при отправке сообщения.');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Ошибка отправки.');
+            } finally {
+                document.getElementById('sendButton').style.display = 'inline-block';
+                document.getElementById('loadingSpinner').style.display = 'none';
+            }
         }
 
-        // Прокрутка вниз при загрузке страницы
+        // При загрузке страницы прокручивать вниз
         window.onload = () => {
             const chat = document.getElementById('chat-messages');
             chat.scrollTop = chat.scrollHeight;
@@ -89,4 +99,5 @@
     </script>
 </body>
 </html>
+
 
