@@ -25,15 +25,16 @@
 </head>
 <body>
     <div class="chat-container">
-        <div class="chat-messages" id="chat-messages">
-            {% for role, message in chat_history %}
-                {% if role != 'system' %}
-                    <div class="message {{ 'user' if role == 'user' else 'assistant' }}">
-                        {{ message }}
+      <div class="chat-messages" id="chat-messages">
+            {% for message in chat_history %}
+                {% if message.role != 'system' %}
+                    <div class="message {{ 'user' if message.role == 'user' else 'assistant' }}">
+                        {{ message.content }}
                     </div>
                 {% endif %}
             {% endfor %}
         </div>
+
 
 
         <form id="chat-form" class="chat-form" onsubmit="sendMessage(event)">
