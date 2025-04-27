@@ -23,13 +23,17 @@
 </head>
 <body>
     <div class="chat-container">
-        <div id="chat-messages">
-            {% for message in chat_history %}
-                <div class="{% if message.role == 'user' %}user-message{% else %}assistant-message{% endif %}">
-                    {{ message.content }}
-                </div>
-            {% endfor %}
+       <div id="chat-messages">
+          {% for message in chat_history %}
+            {% if message.role != 'system' %}
+              <div class="chat-bubble {% if message.role == 'user' %}user{% else %}assistant{% endif %}">
+                {{ message.content }}
+              </div>
+            {% endif %}
+          {% endfor %}
         </div>
+
+
 
         <form id="chat-form" class="chat-form" onsubmit="sendMessage(event)">
             <input type="text" id="userInput" name="message" placeholder="Введите сообщение..." autocomplete="off" required>

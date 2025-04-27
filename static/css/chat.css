@@ -19,13 +19,36 @@ body {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-.chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 10px;
+#chat-messages {
     display: flex;
     flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+    overflow-y: auto;
+    max-height: calc(100vh - 150px);
 }
+
+.chat-bubble {
+    max-width: 75%;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 16px;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.chat-bubble.user {
+    background-color: #DCF8C6; /* светло-зелёный как у юзера в WhatsApp */
+    align-self: flex-end;
+    text-align: right;
+}
+
+.chat-bubble.assistant {
+    background-color: #F1F0F0; /* светло-серый для ассистента */
+    align-self: flex-start;
+    text-align: left;
+}
+
 
 .message {
     margin-bottom: 10px;
