@@ -25,15 +25,14 @@
 </head>
 <body>
     <div class="chat-container">
-        <div class="chat-messages" id="chat-messages">
-            {% for message in chat_history %}
-                {% if message.role == 'user' or message.role == 'assistant' %}
-                    <div class="message {{ message.role }}">
-                        {{ message.content }}
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div> <!-- вот тут правильно закрываем div сообщений -->
+      <div id="chat-messages">
+          {% for message in chat_history %}
+            <div class="{% if message.role == 'user' %}user-message{% else %}assistant-message{% endif %}">
+              {{ message.content }}
+            </div>
+          {% endfor %}
+        </div>
+
 
         <form id="chat-form" class="chat-form" onsubmit="sendMessage(event)">
             <input type="text" id="userInput" name="message" placeholder="Введите сообщение..." autocomplete="off" required>
