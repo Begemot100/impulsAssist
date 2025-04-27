@@ -10,7 +10,7 @@ app.config['SESSION_REDIS'] = redis.from_url(os.getenv("REDIS_URL"))
 app.config['SESSION_PERMANENT'] = False  # Можно True, если хочешь долгую сессию
 app.secret_key = os.getenv("FLASK_SECRET_KEY")  # Секретный ключ для сессий
 
-Session(app)
+session(app)
 @app.route("/", methods=["GET", "POST"])
 def chat():
     if 'chat_history' not in session:
