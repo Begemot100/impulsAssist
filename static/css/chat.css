@@ -20,12 +20,13 @@ body {
 }
 
 #chat-messages {
+    flex: 1;
     display: flex;
     flex-direction: column;
     padding: 20px;
     gap: 10px;
     overflow-y: auto;
-    max-height: calc(100vh - 150px);
+    scroll-behavior: smooth;
 }
 
 .chat-bubble {
@@ -37,36 +38,16 @@ body {
     word-break: break-word;
 }
 
-.chat-bubble.user {
-    background-color: #DCF8C6; /* светло-зелёный как у юзера в WhatsApp */
+.chat-bubble.user-message {
+    background-color: #dcf8c6; /* светло-зелёный как у WhatsApp */
     align-self: flex-end;
     text-align: right;
 }
 
-.chat-bubble.assistant {
-    background-color: #F1F0F0; /* светло-серый для ассистента */
+.chat-bubble.assistant-message {
+    background-color: #f1f0f0; /* светло-серый */
     align-self: flex-start;
     text-align: left;
-}
-
-
-.message {
-    margin-bottom: 10px;
-    max-width: 80%;
-    padding: 10px;
-    border-radius: 10px;
-    font-size: 16px;
-    line-height: 1.4;
-}
-
-.user {
-    background: #dcf8c6;
-    align-self: flex-end;
-}
-
-.assistant {
-    background: #ececec;
-    align-self: flex-start;
 }
 
 .chat-form {
@@ -99,4 +80,20 @@ body {
 
 .chat-form button:hover {
     background: #45a049;
+}
+
+/* Спиннер загрузки */
+#loadingSpinner {
+    display: none;
+    width: 24px;
+    height: 24px;
+    border: 3px solid #ccc;
+    border-top-color: #333;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
