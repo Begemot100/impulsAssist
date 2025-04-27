@@ -203,9 +203,10 @@ def chat_with_assistant(prompt):
     if 'chat_history' not in session:
         session['chat_history'] = []
 
+    chat_history = session['chat_history']
+
     if prompt is None:
-        session['chat_history'] = []
-        chat_history = []
+        # 👇 Если пользователь заходит первый раз — сразу приветствие, без .strip()
         greeting = send_greeting(current_lang)
         chat_history.append({"role": "assistant", "content": greeting})
         session['chat_history'] = chat_history
@@ -214,13 +215,67 @@ def chat_with_assistant(prompt):
             "chat_history": chat_history
         }
 
-    chat_history = session['chat_history']
+    # Только если prompt не None — чистим текст
     prompt = clean_text(prompt)
     print(f"💬 Пользователь: {prompt}")
 
-    # ➡️ Если это обычное приветствие — отвечаем сами, не ищем в базе
-    if prompt.lower() in GREETING_KEYWORDS:
-        assistant_reply = send_greeting(current_lang)
+    if waiting_for_language:
+        chosen_lang = detect_language_choice(prompt)
+        if chosen_lang:
+            current_lang = chosen_lang
+            waiting_for_language = False
+            system_message = get_system_message(current_lang)
+            chat_history.append({"role": "system", "content": system_message})
+            assistant_reply = send_greeting(current_lang)
+            chat_history.append({"role": "assistant", "content": assistant_reply})
+            session['chat_history'] = chat_history
+            time.sleep(calculate_typing_delay(assistant_reply))
+            return {
+                "assistant_reply": assistant_reply,
+                "chat_history": chat_history
+            }
+        else:
+            assistant_reply = "Por favor, elija el idioma de comunicación: Español 🇪🇸, Русский 🇷🇺, English 🇬🇧"
+            chat_history.append({"role": "assistant", "content": assistant_reply})
+            session['chat_history'] = chat_history
+            time.sleep(calculate_typing_delay(assistant_reply))
+            return {
+                "assistant_reply": assistant_reply,
+                "chat_history": chat_history
+            }
+
+    chat_history.append({"role": "user", "content": prompt})
+
+    lang = detect_language(prompt)
+    system_message = get_system_message(current_lang)
+
+    if waiting_for_client_info:
+        parse_info_from_prompt(prompt)
+        print(f"🗋 Состояние client_data_temp: {client_data_temp}")
+
+        if client_data_temp.get("name") and client_data_temp.get("phone"):
+            contact_id = create_contact(client_data_temp["name"], client_data_temp["phone"])
+            if contact_id:
+                lead_id = create_lead(client_data_temp["name"], contact_id)
+                if lead_id:
+                    chat_text = format_chat_history(chat_history)
+                    create_note_for_lead(lead_id, chat_text)
+
+            assistant_reply = {
+                "ru": "✅ Предварительная запись оформлена! Наш сотрудник свяжется с вами для подтверждения.",
+                "es": "✅ ¡Su reserva preliminar ha sido realizada! Nuestro asistente se pondrá en contacto para confirmarlo.",
+                "en": "✅ Preliminary booking created! Our manager will contact you to confirm."
+            }.get(current_lang, "✅ Предварительная запись оформлена!")
+
+            waiting_for_client_info = False
+            client_data_temp = {}
+        else:
+            assistant_reply = {
+                "ru": "Пожалуйста, укажите ваше имя и номер телефона для записи. 📞",
+                "es": "Por favor, indique su nombre y número de teléfono. 📞",
+                "en": "Please provide your name and phone number to proceed with the booking. 📞"
+            }.get(current_lang, "Пожалуйста, укажите ваше имя и номер телефона. 📞")
+
         chat_history.append({"role": "assistant", "content": assistant_reply})
         session['chat_history'] = chat_history
         time.sleep(calculate_typing_delay(assistant_reply))
@@ -229,26 +284,20 @@ def chat_with_assistant(prompt):
             "chat_history": chat_history
         }
 
-    # ➡️ Иначе продолжаем работать как обычно:
-    chat_history.append({"role": "user", "content": prompt})
-    system_message = get_system_message(current_lang)
     messages = [{"role": "system", "content": system_message}] + chat_history
 
-    docs = db.similarity_search(prompt, k=2)
+    response = client.chat.completions.create(
+        model="gpt-4-turbo",
+        messages=messages,
+        max_tokens=500
+    )
 
-    if docs and any(doc.page_content.strip() for doc in docs):
-        knowledge_text = "\n\n".join(doc.page_content for doc in docs)
-        assistant_reply = f"Вот, что я нашла по вашему запросу:\n\n{knowledge_text}"
-    else:
-        response = client.chat.completions.create(
-            model="gpt-4-turbo",
-            messages=messages,
-            max_tokens=500
-        )
-        assistant_reply = clean_text(response.choices[0].message.content.strip())
+    assistant_reply = clean_text(response.choices[0].message.content.strip())
+    print(f"🧐 Ассистент: {assistant_reply}")
 
-    print(f"🤖 Ассистент: {assistant_reply}")
+    chat_history.append({"role": "assistant", "content": assistant_reply})
 
+    # Проверяем — вдруг пользователь написал про запись
     if any(word in prompt.lower() for word in ["запис", "консультац", "удалить", "appointment", "consultation", "tattoo removal"]):
         waiting_for_client_info = True
         assistant_reply += "\n\n" + {
@@ -257,27 +306,13 @@ def chat_with_assistant(prompt):
             "en": "Please write your name and phone number for the preliminary booking. 📞"
         }.get(current_lang, "Пожалуйста, укажите ваше имя и номер телефона. 📞")
 
-    if waiting_for_client_info:
-        parse_info_from_prompt(prompt)
-        if client_data_temp.get("name") and client_data_temp.get("phone"):
-            contact_id = create_contact(client_data_temp["name"], client_data_temp["phone"])
-            if contact_id:
-                lead_id = create_lead(client_data_temp["name"], contact_id)
-                if lead_id:
-                    create_note_for_lead(lead_id, format_chat_history(chat_history))
-            waiting_for_client_info = False
-            client_data_temp = {}
-            session['chat_history'] = []
-            chat_history = []
-
-    chat_history.append({"role": "assistant", "content": assistant_reply})
     session['chat_history'] = chat_history
     time.sleep(calculate_typing_delay(assistant_reply))
-
     return {
         "assistant_reply": assistant_reply,
         "chat_history": chat_history
     }
+
 
 
 
