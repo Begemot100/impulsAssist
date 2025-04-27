@@ -26,10 +26,12 @@
 <body>
     <div class="chat-container">
         <div class="chat-messages" id="chat-messages">
-            {% for message in chat_history %}
-                <div class="message {{ 'user' if message.role == 'user' else 'assistant' }}">
-                    {{ message.content }}
-                </div>
+            {% for role, message in chat_history %}
+                {% if role != 'system' %}
+                    <div class="message {{ 'user' if role == 'user' else 'assistant' }}">
+                        {{ message }}
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
 
