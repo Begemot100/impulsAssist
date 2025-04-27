@@ -186,7 +186,7 @@ def create_lead_with_chat(name, phone, chat_history):
 # ===== Основная функция =====
 from flask import session
 import time
-
+# .
 def chat_with_assistant(prompt):
     global waiting_for_client_info, waiting_for_language, client_data_temp, current_lang
 
