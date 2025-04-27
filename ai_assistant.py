@@ -50,6 +50,25 @@ print(json.dumps(response.json(), indent=2, ensure_ascii=False))
 def clean_text(text):
     return "".join(c for c in unicodedata.normalize("NFKD", text) if ord(c) < 0xFFFF)
 
+server_sessions = {}
+
+def get_session_id():
+    return session.get('session_id') or create_session_id()
+
+def create_session_id():
+    import uuid
+    session_id = str(uuid.uuid4())
+    session['session_id'] = session_id
+    return session_id
+
+def get_chat_history():
+    session_id = get_session_id()
+    return server_sessions.get(session_id, [])
+
+def save_chat_history(chat_history):
+    session_id = get_session_id()
+    server_sessions[session_id] = chat_history
+
 def detect_language(prompt):
     try:
         return detect(prompt)
@@ -190,8 +209,7 @@ import time
 def chat_with_assistant(prompt):
     global waiting_for_client_info, waiting_for_language, client_data_temp, current_lang
 
-    if 'chat_history' not in session:
-        session['chat_history'] = []
+    # chat_history = get_chat_history()
 
     chat_history = session['chat_history']
 
