@@ -195,15 +195,16 @@ def create_lead_with_chat(name, phone, chat_history):
 from flask import session
 import time
 # .
+GREETING_KEYWORDS = ["привет", "здравствуйте", "добрый день", "добрый вечер", "hello", "hi", "hey"]
+
 def chat_with_assistant(prompt):
     global waiting_for_client_info, waiting_for_language, client_data_temp, current_lang
 
     if 'chat_history' not in session:
         session['chat_history'] = []
 
-    # Если пользователь заходит в первый раз или нажимает кнопку "начать"
     if prompt is None:
-        session['chat_history'] = []  # Очищаем историю
+        session['chat_history'] = []
         chat_history = []
         greeting = send_greeting(current_lang)
         chat_history.append({"role": "assistant", "content": greeting})
@@ -217,19 +218,28 @@ def chat_with_assistant(prompt):
     prompt = clean_text(prompt)
     print(f"💬 Пользователь: {prompt}")
 
-    chat_history.append({"role": "user", "content": prompt})
+    # ➡️ Если это обычное приветствие — отвечаем сами, не ищем в базе
+    if prompt.lower() in GREETING_KEYWORDS:
+        assistant_reply = send_greeting(current_lang)
+        chat_history.append({"role": "assistant", "content": assistant_reply})
+        session['chat_history'] = chat_history
+        time.sleep(calculate_typing_delay(assistant_reply))
+        return {
+            "assistant_reply": assistant_reply,
+            "chat_history": chat_history
+        }
 
+    # ➡️ Иначе продолжаем работать как обычно:
+    chat_history.append({"role": "user", "content": prompt})
     system_message = get_system_message(current_lang)
     messages = [{"role": "system", "content": system_message}] + chat_history
 
-    # Ищем в базе знаний
     docs = db.similarity_search(prompt, k=2)
 
     if docs and any(doc.page_content.strip() for doc in docs):
         knowledge_text = "\n\n".join(doc.page_content for doc in docs)
         assistant_reply = f"Вот, что я нашла по вашему запросу:\n\n{knowledge_text}"
     else:
-        # Если в базе нет ответа — спрашиваем у GPT
         response = client.chat.completions.create(
             model="gpt-4-turbo",
             messages=messages,
@@ -239,7 +249,6 @@ def chat_with_assistant(prompt):
 
     print(f"🤖 Ассистент: {assistant_reply}")
 
-    # Проверяем: если человек хочет записаться — спрашиваем имя/телефон
     if any(word in prompt.lower() for word in ["запис", "консультац", "удалить", "appointment", "consultation", "tattoo removal"]):
         waiting_for_client_info = True
         assistant_reply += "\n\n" + {
@@ -258,8 +267,6 @@ def chat_with_assistant(prompt):
                     create_note_for_lead(lead_id, format_chat_history(chat_history))
             waiting_for_client_info = False
             client_data_temp = {}
-
-            # ❗❗❗ Очистить историю после успешной записи!
             session['chat_history'] = []
             chat_history = []
 
@@ -271,6 +278,7 @@ def chat_with_assistant(prompt):
         "assistant_reply": assistant_reply,
         "chat_history": chat_history
     }
+
 
 
 
