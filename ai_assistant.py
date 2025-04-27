@@ -51,9 +51,9 @@ print(json.dumps(response.json(), indent=2, ensure_ascii=False))
 # ===== Вспомогательные функции =====
 
 redis_client = redis.Redis(
-    host=os.getenv("REDIS_HOST"),
-    port=int(os.getenv("REDIS_PORT")),
-    password=os.getenv("REDIS_PASSWORD"),
+    host=os.getenv("REDISHOST"),
+    port=int(os.getenv("REDISPORT")),
+    password=os.getenv("REDISPASSWORD"),
     decode_responses=True
 )
 
