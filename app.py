@@ -1,16 +1,16 @@
-from flask import Flask, request, render_template, redirect, session
+from flask import Flask, request, render_template, redirect, Session
 from ai_assistant import chat_with_assistant
 import os
 import redis
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey")  # для сессий
+# app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey")  # для сессий
 app.config['SESSION_TYPE'] = 'redis'
 app.config['SESSION_REDIS'] = redis.from_url(os.getenv("REDIS_URL"))
 app.config['SESSION_PERMANENT'] = False  # Можно True, если хочешь долгую сессию
 app.secret_key = os.getenv("FLASK_SECRET_KEY")  # Секретный ключ для сессий
 
-session(app)
+Session(app)
 @app.route("/", methods=["GET", "POST"])
 def chat():
     if 'chat_history' not in session:
