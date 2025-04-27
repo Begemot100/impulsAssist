@@ -255,7 +255,7 @@ def chat_with_assistant(prompt):
             client_data_temp = {}
 
     chat_history.append({"role": "assistant", "content": assistant_reply})
-    session['chat_history'] = chat_history
+    session['chat_history'] = chat_history[-10:]
     time.sleep(calculate_typing_delay(assistant_reply))
 
     return {
