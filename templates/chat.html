@@ -6,7 +6,6 @@
     <title>Alina</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
     <style>
-        /* Спиннер загрузки */
         #loadingSpinner {
             display: none;
             width: 24px;
@@ -17,7 +16,6 @@
             animation: spin 1s linear infinite;
             margin-left: 10px;
         }
-
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -42,19 +40,15 @@
 
     <script>
         async function sendMessage(event) {
-            event.preventDefault(); // Остановить отправку формы
+            event.preventDefault();
 
             const userInput = document.getElementById('userInput');
             const message = userInput.value.trim();
+            if (!message) return;
 
-            if (message === '') return;
-
-            // Прячем кнопку, показываем спиннер
-            document.getElementById('sendButton').style.display = 'none';
-            document.getElementById('loadingSpinner').style.display = 'inline-block';
-
-            // Добавляем сообщение пользователя сразу на страницу
             const chatMessages = document.getElementById('chat-messages');
+
+            // Отображаем сообщение пользователя сразу
             const userDiv = document.createElement('div');
             userDiv.className = 'user-message';
             userDiv.innerText = message;
@@ -62,36 +56,33 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
             userInput.value = '';
+            document.getElementById('sendButton').style.display = 'none';
+            document.getElementById('loadingSpinner').style.display = 'inline-block';
 
-            // Отправляем сообщение на сервер
             try {
-                const response = await fetch('/', {
+                const response = await fetch('/send_message', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: 'message=' + encodeURIComponent(message)
                 });
 
-                if (response.ok) {
-                    const text = await response.text();
-                    // Перезагружаем страницу, чтобы получить ответ ассистента
-                    document.open();
-                    document.write(text);
-                    document.close();
-                } else {
-                    alert('Ошибка при отправке сообщения.');
-                }
+                const data = await response.json();
+
+                // Отображаем ответ ассистента
+                const assistantDiv = document.createElement('div');
+                assistantDiv.className = 'assistant-message';
+                assistantDiv.innerText = data.assistant_reply;
+                chatMessages.appendChild(assistantDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
             } catch (error) {
                 console.error('Ошибка:', error);
-                alert('Ошибка отправки.');
+                alert('Ошибка отправки сообщения.');
             } finally {
                 document.getElementById('sendButton').style.display = 'inline-block';
                 document.getElementById('loadingSpinner').style.display = 'none';
             }
         }
 
-        // При загрузке страницы прокручивать вниз
         window.onload = () => {
             const chat = document.getElementById('chat-messages');
             chat.scrollTop = chat.scrollHeight;
@@ -99,5 +90,6 @@
     </script>
 </body>
 </html>
+
 
 

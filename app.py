@@ -31,6 +31,12 @@ def chat():
 
     return render_template("chat.html", chat_history=session.get('chat_history', []))
 
+@app.route("/send_message", methods=["POST"])
+def send_message():
+    user_message = request.form["message"]
+    result = chat_with_assistant(user_message)
+    session['chat_history'] = result['chat_history']
+    return result
 
 @app.route("/webhook", methods=["GET", "POST"])
 def webhook():
