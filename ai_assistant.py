@@ -2,6 +2,8 @@ import requests
 import openai
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import OpenAIEmbeddings
+
 from langdetect import detect
 import re
 import json
@@ -10,6 +12,10 @@ from knowledge_base import knowledge_base
 import time
 import os
 
+db = FAISS.load_local(
+    "faiss_index",
+    OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
+)
 
 # Если нет базы и модели, временно отключим их импорты
 # from ai_assistant import ClientInquiry, session  # ❌ Убрал для чистоты (если тебе надо — включишь)
