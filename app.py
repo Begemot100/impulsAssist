@@ -1,7 +1,8 @@
-from flask import Flask, request, render_template, redirect, Session
+from flask import Flask, request, render_template, redirect, session
 from ai_assistant import chat_with_assistant
 import os
 import redis
+from flask_session import Session
 
 app = Flask(__name__)
 # app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey")  # для сессий
