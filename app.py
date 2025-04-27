@@ -4,7 +4,7 @@ import os
 
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('supersecretkey123', 'supersecretkey')
+app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey123")  # 👈 добавить строку
 
 # Список для хранения переписки
 chat_history = []
