@@ -1,0 +1,60 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myValues">
+        <value>
+          <list size="1">
+            <item index="0" class="java.lang.String" itemvalue="main" />
+          </list>
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PyCompatibilityInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ourVersions">
+        <value>
+          <list size="2">
+            <item index="0" class="java.lang.String" itemvalue="2.7" />
+            <item index="1" class="java.lang.String" itemvalue="3.11" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="2">
+            <item index="0" class="java.lang.String" itemvalue="ruamel-yaml" />
+            <item index="1" class="java.lang.String" itemvalue="conda" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="int.__getitem__" />
+          <option value="str.urls" />
+          <option value="main.runGame" />
+          <option value="main.showGameOverScreen" />
+          <option value="main.drawPressKeyMsg" />
+          <option value="main.checkForKeyPress" />
+          <option value="ImageFont" />
+          <option value="ImageDraw" />
+          <option value="codewars_test" />
+          <option value="Convert_PDF_MP3.*" />
+          <option value="code_to_test" />
+          <option value="paramiko" />
+          <option value="telegram" />
+          <option value="Queue" />
+          <option value="sha512_crypt" />
+          <option value="ponggame.youtubesearchpython" />
+          <option value="telegram.ext.filters.Filters" />
+          <option value="telegram.ext._updater.Updater.*" />
+          <option value="flask_sqlalchemy.SQLAlchemy" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
