@@ -195,7 +195,18 @@ def chat_with_assistant(prompt):
 
     chat_history = session['chat_history']
 
-    prompt = prompt.strip()
+    if prompt is None:
+        # 👇 Если пользователь заходит первый раз — сразу приветствие, без .strip()
+        greeting = send_greeting(current_lang)
+        chat_history.append({"role": "assistant", "content": greeting})
+        session['chat_history'] = chat_history
+        return {
+            "assistant_reply": greeting,
+            "chat_history": chat_history
+        }
+
+    # Только если prompt не None — чистим текст
+    prompt = clean_text(prompt)
     print(f"💬 Пользователь: {prompt}")
 
     if waiting_for_language:
@@ -225,12 +236,12 @@ def chat_with_assistant(prompt):
 
     chat_history.append({"role": "user", "content": prompt})
 
-    lang = detect_language(prompt)  # если хочешь можешь оставить detect_language_choice()
+    lang = detect_language(prompt)
     system_message = get_system_message(current_lang)
 
     if waiting_for_client_info:
         parse_info_from_prompt(prompt)
-        print(f"📋 Состояние client_data_temp: {client_data_temp}")
+        print(f"🗋 Состояние client_data_temp: {client_data_temp}")
 
         if client_data_temp.get("name") and client_data_temp.get("phone"):
             contact_id = create_contact(client_data_temp["name"], client_data_temp["phone"])
@@ -271,8 +282,8 @@ def chat_with_assistant(prompt):
         max_tokens=500
     )
 
-    assistant_reply = response.choices[0].message.content.strip()
-    print(f"🤖 Ассистент: {assistant_reply}")
+    assistant_reply = clean_text(response.choices[0].message.content.strip())
+    print(f"🧐 Ассистент: {assistant_reply}")
 
     chat_history.append({"role": "assistant", "content": assistant_reply})
 
@@ -291,6 +302,7 @@ def chat_with_assistant(prompt):
         "assistant_reply": assistant_reply,
         "chat_history": chat_history
     }
+
 
 
 def create_contact(name, phone):
