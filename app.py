@@ -3,6 +3,7 @@ from ai_assistant import chat_with_assistant
 import os
 import redis
 from flask_session import Session
+import uuid
 
 app = Flask(__name__)
 # app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey")  # для сессий

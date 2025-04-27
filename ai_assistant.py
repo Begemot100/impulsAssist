@@ -11,6 +11,7 @@ import time
 import os
 import redis
 import uuid
+from flask import session
 
 
 
@@ -87,8 +88,7 @@ def get_chat_history():
 
 def save_chat_history(chat_history):
     session_id = get_session_id()
-    redis_client.set(f"chat:{session_id}", json.dumps(chat_history), ex=60*60*24)  # История живёт 24 часа
-
+    redis_client.set(f"chat:{session_id}", json.dumps(chat_history), ex=86400)  # TTL = 1 день
 
 def detect_language(prompt):
     try:
@@ -345,6 +345,7 @@ def chat_with_assistant(prompt):
             "es": "Por favor, escriba su nombre y número de teléfono para la reserva preliminar. 📞",
             "en": "Please write your name and phone number for the preliminary booking. 📞"
         }.get(current_lang, "Пожалуйста, укажите ваше имя и номер телефона. 📞")
+    save_chat_history(chat_history)
 
     session['chat_history'] = chat_history
     time.sleep(calculate_typing_delay(assistant_reply))
