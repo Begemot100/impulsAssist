@@ -14,8 +14,10 @@ import os
 
 db = FAISS.load_local(
     "faiss_index",
-    OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
+    OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY")),
+    allow_dangerous_deserialization=True
 )
+
 
 # Если нет базы и модели, временно отключим их импорты
 # from ai_assistant import ClientInquiry, session  # ❌ Убрал для чистоты (если тебе надо — включишь)
