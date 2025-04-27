@@ -1,7 +1,10 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, session
 from ai_assistant import chat_with_assistant
+import os
+
 
 app = Flask(__name__)
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'supersecretkey')
 
 # Список для хранения переписки
 chat_history = []
@@ -9,15 +12,17 @@ chat_history = []
 
 @app.route("/", methods=["GET", "POST"])
 def chat():
-    if request.method == "POST":
-        user_message = request.form.get("message")
-        if user_message:
-            chat_history.append(("Вы", user_message))
-            assistant_reply = chat_with_assistant(user_message)
-            chat_history.append(("Ассистент", assistant_reply))
-        return redirect(url_for('chat'))
+    if 'chat_history' not in session:
+        session['chat_history'] = []
 
-    return render_template("chat.html", chat_history=chat_history)
+    if request.method == "POST":
+        user_message = request.form["message"]
+        assistant_reply = chat_with_assistant(user_message)
+        session['chat_history'] = assistant_reply['chat_history']  # Обновляем в сессии
+
+        return redirect("/")
+
+    return render_template("chat.html", chat_history=session.get('chat_history', []))
 
 
 @app.route("/webhook", methods=["GET", "POST"])

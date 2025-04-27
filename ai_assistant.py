@@ -184,9 +184,15 @@ def create_lead_with_chat(name, phone, chat_history):
 
 
 # ===== Основная функция =====
+from flask import session
+import time
 
 def chat_with_assistant(prompt):
-    global chat_history, waiting_for_client_info, waiting_for_language, client_data_temp, current_lang
+    global waiting_for_client_info, waiting_for_language, client_data_temp, current_lang
+
+    if 'chat_history' not in session:
+        session['chat_history'] = []
+    chat_history = session['chat_history']
 
     prompt = clean_text(prompt)
     print(f"💬 Пользователь: {prompt}")
@@ -200,11 +206,13 @@ def chat_with_assistant(prompt):
             chat_history.append({"role": "system", "content": system_message})
             assistant_reply = send_greeting(current_lang)
             chat_history.append({"role": "assistant", "content": assistant_reply})
+            session['chat_history'] = chat_history
             time.sleep(calculate_typing_delay(assistant_reply))
             return assistant_reply
         else:
             assistant_reply = "Por favor, elija el idioma de comunicación: Español 🇪🇸, Русский 🇷🇺, English 🇬🇧"
             chat_history.append({"role": "assistant", "content": assistant_reply})
+            session['chat_history'] = chat_history
             time.sleep(calculate_typing_delay(assistant_reply))
             return assistant_reply
 
@@ -239,19 +247,23 @@ def chat_with_assistant(prompt):
             }.get(current_lang, "Пожалуйста, укажите ваше имя и номер телефона. 📞")
 
         chat_history.append({"role": "assistant", "content": assistant_reply})
+        session['chat_history'] = chat_history
         time.sleep(calculate_typing_delay(assistant_reply))
         return assistant_reply
 
     messages = [{"role": "system", "content": system_message}] + chat_history
+
     response = client.chat.completions.create(
         model="gpt-4-turbo",
         messages=messages,
         max_tokens=500
     )
+
     assistant_reply = clean_text(response.choices[0].message.content.strip())
     chat_history.append({"role": "assistant", "content": assistant_reply})
+    session['chat_history'] = chat_history
 
-    # Если пользователь хочет записаться — сразу спрашиваем данные
+    # Проверяем: если в сообщении пользователь хочет записаться
     if any(word in prompt.lower() for word in ["запис", "консультац", "удалить", "appointment", "consultation", "tattoo removal"]):
         waiting_for_client_info = True
         assistant_reply += "\n\n" + {
@@ -262,6 +274,7 @@ def chat_with_assistant(prompt):
 
     time.sleep(calculate_typing_delay(assistant_reply))
     return assistant_reply
+
 
 
 def create_contact(name, phone):
