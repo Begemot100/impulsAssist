@@ -57,6 +57,10 @@ redis_client = redis.Redis(
     decode_responses=True
 )
 
+redis_client = redis.from_url(
+    os.getenv("REDIS_URL"),
+    decode_responses=True
+)
 def clean_text(text):
     return "".join(c for c in unicodedata.normalize("NFKD", text) if ord(c) < 0xFFFF)
 
