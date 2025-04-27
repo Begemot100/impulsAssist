@@ -5,24 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alina</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+    <style>
+        /* Можно добавить небольшой стиль для спиннера */
+        #loadingSpinner {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid #ccc;
+            border-top-color: #333;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
     <div class="chat-container">
         <div class="chat-messages" id="chat-messages">
             {% for role, message in chat_history %}
-                <div class="message {{ 'user' if role == 'Вы' else 'assistant' }}">
+                <div class="message {{ 'user' if role == 'user' else 'assistant' }}">
                     {{ message }}
                 </div>
             {% endfor %}
         </div>
 
-        <form action="/" method="post" class="chat-form">
-            <input type="text" name="message" placeholder="Введите сообщение..." autocomplete="off" required>
-            <button type="submit">➤</button>
+        <form id="chat-form" class="chat-form" onsubmit="sendMessage(event)">
+            <input type="text" id="userInput" name="message" placeholder="Введите сообщение..." autocomplete="off" required>
+            <button type="submit" id="sendButton">➤</button>
+            <div id="loadingSpinner"></div>
         </form>
     </div>
 
     <script>
+        function sendMessage(event) {
+            event.preventDefault();  // Останавливаем стандартную отправку формы
+
+            const userInput = document.getElementById('userInput');
+            const userMessage = userInput.value.trim();
+
+            if (userMessage === '') {
+                return;
+            }
+
+            // Прячем кнопку отправки и показываем спиннер
+            document.getElementById('sendButton').style.display = 'none';
+            document.getElementById('loadingSpinner').style.display = 'inline-block';
+
+            fetch('/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'message=' + encodeURIComponent(userMessage),
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.open();
+                document.write(data);
+                document.close();
+            })
+            .catch(error => {
+                console.error('Ошибка при отправке сообщения:', error);
+                alert('Произошла ошибка при отправке сообщения.');
+            })
+            .finally(() => {
+                document.getElementById('sendButton').style.display = 'inline-block';
+                document.getElementById('loadingSpinner').style.display = 'none';
+            });
+
+            userInput.value = '';
+        }
+
+        // Прокрутка вниз при загрузке страницы
         window.onload = () => {
             const chat = document.getElementById('chat-messages');
             chat.scrollTop = chat.scrollHeight;

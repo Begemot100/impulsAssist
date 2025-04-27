@@ -192,9 +192,10 @@ def chat_with_assistant(prompt):
 
     if 'chat_history' not in session:
         session['chat_history'] = []
+
     chat_history = session['chat_history']
 
-    prompt = clean_text(prompt)
+    prompt = prompt.strip()
     print(f"💬 Пользователь: {prompt}")
 
     if waiting_for_language:
@@ -208,15 +209,23 @@ def chat_with_assistant(prompt):
             chat_history.append({"role": "assistant", "content": assistant_reply})
             session['chat_history'] = chat_history
             time.sleep(calculate_typing_delay(assistant_reply))
-            return assistant_reply
+            return {
+                "assistant_reply": assistant_reply,
+                "chat_history": chat_history
+            }
         else:
             assistant_reply = "Por favor, elija el idioma de comunicación: Español 🇪🇸, Русский 🇷🇺, English 🇬🇧"
             chat_history.append({"role": "assistant", "content": assistant_reply})
             session['chat_history'] = chat_history
             time.sleep(calculate_typing_delay(assistant_reply))
-            return assistant_reply
+            return {
+                "assistant_reply": assistant_reply,
+                "chat_history": chat_history
+            }
 
     chat_history.append({"role": "user", "content": prompt})
+
+    lang = detect_language(prompt)  # если хочешь можешь оставить detect_language_choice()
     system_message = get_system_message(current_lang)
 
     if waiting_for_client_info:
@@ -249,7 +258,10 @@ def chat_with_assistant(prompt):
         chat_history.append({"role": "assistant", "content": assistant_reply})
         session['chat_history'] = chat_history
         time.sleep(calculate_typing_delay(assistant_reply))
-        return assistant_reply
+        return {
+            "assistant_reply": assistant_reply,
+            "chat_history": chat_history
+        }
 
     messages = [{"role": "system", "content": system_message}] + chat_history
 
@@ -259,11 +271,12 @@ def chat_with_assistant(prompt):
         max_tokens=500
     )
 
-    assistant_reply = clean_text(response.choices[0].message.content.strip())
-    chat_history.append({"role": "assistant", "content": assistant_reply})
-    session['chat_history'] = chat_history
+    assistant_reply = response.choices[0].message.content.strip()
+    print(f"🤖 Ассистент: {assistant_reply}")
 
-    # Проверяем: если в сообщении пользователь хочет записаться
+    chat_history.append({"role": "assistant", "content": assistant_reply})
+
+    # Проверяем — вдруг пользователь написал про запись
     if any(word in prompt.lower() for word in ["запис", "консультац", "удалить", "appointment", "consultation", "tattoo removal"]):
         waiting_for_client_info = True
         assistant_reply += "\n\n" + {
@@ -272,9 +285,12 @@ def chat_with_assistant(prompt):
             "en": "Please write your name and phone number for the preliminary booking. 📞"
         }.get(current_lang, "Пожалуйста, укажите ваше имя и номер телефона. 📞")
 
+    session['chat_history'] = chat_history
     time.sleep(calculate_typing_delay(assistant_reply))
-    return assistant_reply
-
+    return {
+        "assistant_reply": assistant_reply,
+        "chat_history": chat_history
+    }
 
 
 def create_contact(name, phone):
