@@ -7,24 +7,23 @@ app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey")  # для сес
 
 @app.route("/", methods=["GET", "POST"])
 def chat():
-    if request.method == "GET":
-        # При новом заходе на страницу очищаем сессию
-        session['chat_history'] = []
-        session['waiting_for_language'] = True  # Снова спросить язык
-        session['waiting_for_client_info'] = False
-        session['client_data_temp'] = {}
-        session['current_lang'] = None
-
     if 'chat_history' not in session:
         session['chat_history'] = []
 
     if request.method == "POST":
         user_message = request.form["message"]
-        assistant_reply = chat_with_assistant(user_message)
-        session['chat_history'] = assistant_reply['chat_history']  # Обновляем в сессии
+        result = chat_with_assistant(user_message)
+        session['chat_history'] = result['chat_history']
         return redirect("/")
 
+    # ⚡ Если GET-запрос, а переписки нет => сгенерировать приветствие
+    if not session['chat_history']:
+        result = chat_with_assistant(None)
+        session['chat_history'] = result['chat_history']
+
     return render_template("chat.html", chat_history=session.get('chat_history', []))
+
+
 @app.route("/webhook", methods=["GET", "POST"])
 def webhook():
     if request.method == "GET":
