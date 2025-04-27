@@ -26,12 +26,13 @@
 <body>
     <div class="chat-container">
         <div class="chat-messages" id="chat-messages">
-            {% for role, message in chat_history %}
-                <div class="message {{ 'user' if role == 'user' else 'assistant' }}">
-                    {{ message }}
+            {% for message in chat_history %}
+                <div class="message {{ 'user' if message.role == 'user' else 'assistant' }}">
+                    {{ message.content }}
                 </div>
             {% endfor %}
         </div>
+
 
         <form id="chat-form" class="chat-form" onsubmit="sendMessage(event)">
             <input type="text" id="userInput" name="message" placeholder="Введите сообщение..." autocomplete="off" required>
