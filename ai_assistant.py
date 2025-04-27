@@ -2,8 +2,6 @@ import requests
 import openai
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import OpenAIEmbeddings
-
 from langdetect import detect
 import re
 import json
@@ -11,12 +9,6 @@ import unicodedata
 from knowledge_base import knowledge_base
 import time
 import os
-
-db = FAISS.load_local(
-    "faiss_index",
-    OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY")),
-    allow_dangerous_deserialization=True
-)
 
 
 # Если нет базы и модели, временно отключим их импорты
@@ -194,8 +186,6 @@ def create_lead_with_chat(name, phone, chat_history):
 # ===== Основная функция =====
 from flask import session
 import time
-# .
-GREETING_KEYWORDS = ["привет", "здравствуйте", "добрый день", "добрый вечер", "hello", "hi", "hey"]
 
 def chat_with_assistant(prompt):
     global waiting_for_client_info, waiting_for_language, client_data_temp, current_lang
@@ -312,8 +302,6 @@ def chat_with_assistant(prompt):
         "assistant_reply": assistant_reply,
         "chat_history": chat_history
     }
-
-
 
 
 
