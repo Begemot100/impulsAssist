@@ -230,8 +230,6 @@ import time
 def chat_with_assistant(prompt):
     global waiting_for_client_info, waiting_for_language, client_data_temp, current_lang
 
-    # chat_history = get_chat_history()
-
     chat_history = get_chat_history()
 
     if prompt is None:
@@ -250,6 +248,7 @@ def chat_with_assistant(prompt):
     detected_lang = detect_language(prompt)
     if current_lang is None or detected_lang != current_lang:
         current_lang = detected_lang
+        waiting_for_language = False  # 🆕 Сбрасываем ожидание выбора языка!
         system_message = get_system_message(current_lang)
         chat_history.append({"role": "system", "content": system_message})
         assistant_reply = send_greeting(current_lang)
@@ -316,7 +315,7 @@ def chat_with_assistant(prompt):
                 "en": "Please provide your name and phone number to proceed with the booking. 📞"
             }.get(current_lang, "Пожалуйста, укажите ваше имя и номер телефона. 📞")
 
-        chat_history.append({"role": "assistant", "content":assistant_reply})
+        chat_history.append({"role": "assistant", "content": assistant_reply})
         session['chat_history'] = chat_history
         time.sleep(calculate_typing_delay(assistant_reply))
         return {
@@ -345,6 +344,7 @@ def chat_with_assistant(prompt):
             "es": "Por favor, escriba su nombre y número de teléfono para la reserva preliminar. 📞",
             "en": "Please write your name and phone number for the preliminary booking. 📞"
         }.get(current_lang, "Пожалуйста, укажите ваше имя и номер телефона. 📞")
+
     save_chat_history(chat_history)
 
     session['chat_history'] = chat_history
