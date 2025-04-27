@@ -6,7 +6,7 @@
     <title>Alina</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
     <style>
-        /* Можно добавить небольшой стиль для спиннера */
+        /* Спиннер загрузки */
         #loadingSpinner {
             display: none;
             width: 24px;
@@ -25,17 +25,15 @@
 </head>
 <body>
     <div class="chat-container">
-      <div class="chat-messages" id="chat-messages">
-               {% for message in chat_history %}
-                    {% if message.role == 'user' or message.role == 'assistant' %}
-                        <div class="message {{ message.role }}">
-                            {{ message.content }}
-                        </div>
-                    {% endif %}
-                {% endfor %}
-
-
-
+        <div class="chat-messages" id="chat-messages">
+            {% for message in chat_history %}
+                {% if message.role == 'user' or message.role == 'assistant' %}
+                    <div class="message {{ message.role }}">
+                        {{ message.content }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div> <!-- вот тут правильно закрываем div сообщений -->
 
         <form id="chat-form" class="chat-form" onsubmit="sendMessage(event)">
             <input type="text" id="userInput" name="message" placeholder="Введите сообщение..." autocomplete="off" required>
@@ -92,3 +90,4 @@
     </script>
 </body>
 </html>
+
