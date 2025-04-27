@@ -9,6 +9,9 @@ import unicodedata
 from knowledge_base import knowledge_base
 import time
 import os
+import redis
+import uuid
+
 
 
 # Если нет базы и модели, временно отключим их импорты
@@ -47,13 +50,22 @@ response = requests.get(f"{AMOCRM_BASE_URL}/api/v4/leads/pipelines/{9239766}", h
 print(json.dumps(response.json(), indent=2, ensure_ascii=False))
 # ===== Вспомогательные функции =====
 
+redis_client = redis.Redis(
+    host=os.getenv("REDIS_HOST"),
+    port=int(os.getenv("REDIS_PORT")),
+    password=os.getenv("REDIS_PASSWORD"),
+    decode_responses=True
+)
+
 def clean_text(text):
     return "".join(c for c in unicodedata.normalize("NFKD", text) if ord(c) < 0xFFFF)
 
 server_sessions = {}
 
 def get_session_id():
-    return session.get('session_id') or create_session_id()
+    if 'session_id' not in session:
+        session['session_id'] = str(uuid.uuid4())
+    return session['session_id']
 
 def create_session_id():
     import uuid
@@ -63,11 +75,16 @@ def create_session_id():
 
 def get_chat_history():
     session_id = get_session_id()
-    return server_sessions.get(session_id, [])
+    chat_data = redis_client.get(f"chat:{session_id}")
+    if chat_data:
+        return json.loads(chat_data)
+    else:
+        return []
 
 def save_chat_history(chat_history):
     session_id = get_session_id()
-    server_sessions[session_id] = chat_history
+    redis_client.set(f"chat:{session_id}", json.dumps(chat_history), ex=60*60*24)  # История живёт 24 часа
+
 
 def detect_language(prompt):
     try:
@@ -211,7 +228,7 @@ def chat_with_assistant(prompt):
 
     # chat_history = get_chat_history()
 
-    chat_history = session['chat_history']
+    chat_history = get_chat_history()
 
     if prompt is None:
         greeting = send_greeting(current_lang)
