@@ -50,12 +50,12 @@ response = requests.get(f"{AMOCRM_BASE_URL}/api/v4/leads/pipelines/{9239766}", h
 print(json.dumps(response.json(), indent=2, ensure_ascii=False))
 # ===== Вспомогательные функции =====
 
-redis_client = redis.Redis(
-    host=os.getenv("REDISHOST"),
-    port=int(os.getenv("REDISPORT")),
-    password=os.getenv("REDISPASSWORD"),
-    decode_responses=True
-)
+# redis_client = redis.Redis(
+#     host=os.getenv("REDISHOST"),
+#     port=int(os.getenv("REDISPORT")),
+#     password=os.getenv("REDISPASSWORD"),
+#     decode_responses=True
+# )
 
 redis_client = redis.from_url(
     os.getenv("REDIS_URL"),
