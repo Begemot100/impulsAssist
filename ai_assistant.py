@@ -247,21 +247,7 @@ def chat_with_assistant(prompt):
     prompt = clean_text(prompt)
     print(f"💬 Пользователь: {prompt}")
 
-    # 🆕 Автоопределение языка по каждому сообщению
-    detected_lang = detect_language(prompt)
-    if current_lang is None or detected_lang != current_lang:
-        current_lang = detected_lang
-        waiting_for_language = False  # 🆕 Сбрасываем ожидание выбора языка!
-        system_message = get_system_message(current_lang)
-        chat_history.append({"role": "system", "content": system_message})
-        assistant_reply = send_greeting(current_lang)
-        chat_history.append({"role": "assistant", "content": assistant_reply})
-        session['chat_history'] = chat_history
-        return {
-            "assistant_reply": assistant_reply,
-            "chat_history": chat_history
-        }
-
+    # 🆕 Выбор языка только один раз
     if waiting_for_language:
         chosen_lang = detect_language_choice(prompt)
         if chosen_lang:
@@ -287,6 +273,7 @@ def chat_with_assistant(prompt):
                 "chat_history": chat_history
             }
 
+    # После выбора языка продолжаем нормальную переписку
     chat_history.append({"role": "user", "content": prompt})
 
     system_message = get_system_message(current_lang)
@@ -326,6 +313,7 @@ def chat_with_assistant(prompt):
             "chat_history": chat_history
         }
 
+    # Генерация ответа от GPT
     messages = [{"role": "system", "content": system_message}] + chat_history
 
     response = client.chat.completions.create(
@@ -339,7 +327,7 @@ def chat_with_assistant(prompt):
 
     chat_history.append({"role": "assistant", "content": assistant_reply})
 
-    # Проверяем — вдруг пользователь написал про запись
+    # Проверяем — вдруг пользователь хочет записаться
     if any(word in prompt.lower() for word in ["запис", "консультац", "удалить", "appointment", "consultation", "tattoo removal"]):
         waiting_for_client_info = True
         assistant_reply += "\n\n" + {
