@@ -271,8 +271,8 @@ def chat_with_assistant(prompt):
             chat_history.append({"role": "system", "content": system_message})
             assistant_reply = send_greeting(current_lang)
             chat_history.append({"role": "assistant", "content": assistant_reply})
+            save_chat_history(chat_history)
             session['chat_history'] = chat_history
-            time.sleep(calculate_typing_delay(assistant_reply))
             return {
                 "assistant_reply": assistant_reply,
                 "chat_history": chat_history
@@ -280,8 +280,8 @@ def chat_with_assistant(prompt):
         else:
             assistant_reply = "Por favor, elija el idioma de comunicación: Español 🇪🇸, Русский 🇷🇺, English 🇬🇧"
             chat_history.append({"role": "assistant", "content": assistant_reply})
+            save_chat_history(chat_history)
             session['chat_history'] = chat_history
-            time.sleep(calculate_typing_delay(assistant_reply))
             return {
                 "assistant_reply": assistant_reply,
                 "chat_history": chat_history
