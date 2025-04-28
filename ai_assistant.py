@@ -233,11 +233,14 @@ def chat_with_assistant(prompt):
     chat_history = get_chat_history()
 
     if prompt is None:
-        greeting = send_greeting(current_lang)
-        chat_history.append({"role": "assistant", "content": greeting})
+        # 👉 При первом заходе сразу спрашиваем язык
+        assistant_reply = "Por favor, elija el idioma de comunicación: Español 🇪🇸, Русский 🇷🇺, English 🇬🇧"
+        chat_history.append({"role": "assistant", "content": assistant_reply})
+        waiting_for_language = True  # обязательно!
+        save_chat_history(chat_history)
         session['chat_history'] = chat_history
         return {
-            "assistant_reply": greeting,
+            "assistant_reply": assistant_reply,
             "chat_history": chat_history
         }
 
