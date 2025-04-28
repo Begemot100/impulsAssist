@@ -421,3 +421,26 @@ def create_note_for_lead(lead_id, chat_text):
         print(f"✅ Заметка добавлена к сделке {lead_id}")
     else:
         print(f"❌ Ошибка при создании заметки: {response.status_code} {response.text}")
+
+def clean_chat_list():
+    """Удаляет из списка те ID, у которых чатов уже нет в Redis."""
+    chat_ids = redis_client.lrange("chat_history_list", 0, -1)
+    for chat_id in chat_ids:
+        if not redis_client.exists(f"chat:{chat_id}"):
+            redis_client.lrem("chat_history_list", 0, chat_id)
+            print(f"🧹 Удалён пустой ID: {chat_id}")
+    print("✅ Очистка списка чатов завершена.")
+
+
+def get_last_chats_from_redis():
+    """Достаёт последние переписки и очищает старые ID."""
+    clean_chat_list()
+    chat_ids = redis_client.lrange("chat_history_list", 0, -1)
+    chats = []
+    for chat_id in chat_ids:
+        chat_data = redis_client.get(f"chat:{chat_id}")
+        if chat_data:
+            chats.append(json.loads(chat_data))
+    print(f"📚 Загружено {len(chats)} чатов из Redis")
+    return chats
+

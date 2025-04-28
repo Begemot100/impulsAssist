@@ -1,0 +1,54 @@
+c65f6fda36fd8c3db52c45c27d9534837ada68eb 3c4267a1691180e5687aec53db4c12399d9f3846 Begemot100 <you@example.com> 1745775264 +0200	commit: chore: clean history from secrets
+3c4267a1691180e5687aec53db4c12399d9f3846 205128a405615bb3b685ba43337f5c272b8f7016 Begemot100 <you@example.com> 1745775702 +0200	commit: chore: clean history from secrets
+205128a405615bb3b685ba43337f5c272b8f7016 30f0adb9ee22026ec209affe9af3fdf765cc5770 Begemot100 <you@example.com> 1745776879 +0200	commit: chore: clean history from secrets
+30f0adb9ee22026ec209affe9af3fdf765cc5770 aac5693ea555ee4ed60c43a00f9c4c1cb923f52b Begemot100 <you@example.com> 1745777190 +0200	commit: chore: clean history from secrets
+aac5693ea555ee4ed60c43a00f9c4c1cb923f52b 23170e91e29e5fe696f3963ce36cee4e69699480 Begemot100 <you@example.com> 1745777451 +0200	commit: chore: clean history from secrets
+23170e91e29e5fe696f3963ce36cee4e69699480 c290a40b37831eddda9e0831d31efeb0d073aa18 Begemot100 <you@example.com> 1745779101 +0200	commit: chore: clean history from secrets
+c290a40b37831eddda9e0831d31efeb0d073aa18 948a045d07b0898f6a9ad47c6c730484e1cedae2 Begemot100 <you@example.com> 1745779895 +0200	commit: chore: clean history from secrets
+948a045d07b0898f6a9ad47c6c730484e1cedae2 7333569404c8a5cff09db9305e6d9a901a85e9be Begemot100 <you@example.com> 1745780244 +0200	commit: chore: clean history from secrets
+7333569404c8a5cff09db9305e6d9a901a85e9be 350fe7227a03ab58495036b45bf655506c0023af Begemot100 <you@example.com> 1745780557 +0200	commit: chore: clean history from secrets1
+350fe7227a03ab58495036b45bf655506c0023af 4a20633d00ae2482603154e5ec55b15a6a4a0888 Begemot100 <you@example.com> 1745780796 +0200	commit: chore: clean history from secrets2
+4a20633d00ae2482603154e5ec55b15a6a4a0888 ba141a430e1c4b7b6e770ef8cd5c590ef0845dc8 Begemot100 <you@example.com> 1745781118 +0200	commit: chore: clean history from secrets2
+ba141a430e1c4b7b6e770ef8cd5c590ef0845dc8 923c7916334ceafdee517fa32154a0f8327d8c22 Begemot100 <you@example.com> 1745781826 +0200	commit: chore: clean history from secrets2
+923c7916334ceafdee517fa32154a0f8327d8c22 ebdb13ab4e51533c79902d366a1418b62c717ff4 Begemot100 <you@example.com> 1745782250 +0200	commit: chore: clean history from secrets2
+ebdb13ab4e51533c79902d366a1418b62c717ff4 2a9f4d9b5580e04b5220f2513b9d938cbfed33db Begemot100 <you@example.com> 1745782473 +0200	commit: chore: clean history from secrets2
+2a9f4d9b5580e04b5220f2513b9d938cbfed33db 12b20bc715cfde92723648023c320849e79403a1 Begemot100 <you@example.com> 1745782671 +0200	commit: chore: clean history from secrets2
+12b20bc715cfde92723648023c320849e79403a1 37e16a9a7c204954ad456a220cf01c67a61255e9 Begemot100 <you@example.com> 1745782995 +0200	commit: chore: clean history from secrets3
+37e16a9a7c204954ad456a220cf01c67a61255e9 b43202bcd94c2c5ef3246ed722ebf84132a5cccd Begemot100 <you@example.com> 1745784005 +0200	commit: chore: clean history from secrets4
+b43202bcd94c2c5ef3246ed722ebf84132a5cccd b2f65cb985b4928b70021404a2fe1e7e56451f26 Begemot100 <you@example.com> 1745784034 +0200	commit: chore: clean history from secrets4
+b2f65cb985b4928b70021404a2fe1e7e56451f26 b43202bcd94c2c5ef3246ed722ebf84132a5cccd Begemot100 <you@example.com> 1745784081 +0200	reset: moving to HEAD~1
+b43202bcd94c2c5ef3246ed722ebf84132a5cccd 7f5c2caaca62309684ba4d259e6c4568e47f138c Begemot100 <you@example.com> 1745784094 +0200	commit: Fix: removed secrets
+7f5c2caaca62309684ba4d259e6c4568e47f138c 37e16a9a7c204954ad456a220cf01c67a61255e9 Begemot100 <you@example.com> 1745784648 +0200	rebase (start): checkout HEAD~3
+37e16a9a7c204954ad456a220cf01c67a61255e9 37e16a9a7c204954ad456a220cf01c67a61255e9 Begemot100 <you@example.com> 1745784683 +0200	rebase (finish): returning to refs/heads/deploy-setup
+37e16a9a7c204954ad456a220cf01c67a61255e9 e78d06a2a85c0568f0b173d7940b0159780c2eae Begemot100 <you@example.com> 1745784922 +0200	commit: Fix: removed secrets
+e78d06a2a85c0568f0b173d7940b0159780c2eae 7e96d162bcf781dd3d8cbde54901c47b1db40a3f Begemot100 <you@example.com> 1745785404 +0200	commit: Fix: removed secrets1
+7e96d162bcf781dd3d8cbde54901c47b1db40a3f ac25e2b120b952598a451b487cd13e151e41b63d Begemot100 <you@example.com> 1745785783 +0200	commit: Fix: removed secrets1
+ac25e2b120b952598a451b487cd13e151e41b63d c2ad5582eb0e6b470262c87ec4d29651e12ae1a8 Begemot100 <you@example.com> 1745786408 +0200	commit: Fix: removed secrets1
+c2ad5582eb0e6b470262c87ec4d29651e12ae1a8 62b19774f0484914a92811572e2a0753902fac5a Begemot100 <you@example.com> 1745786716 +0200	commit: Fix: removed secrets1
+62b19774f0484914a92811572e2a0753902fac5a 5d6c617c8b3004c9eaeafaceaf3ce1e5acd36b01 Begemot100 <you@example.com> 1745786917 +0200	commit: fix: добавил faiss-cpu в requirements
+5d6c617c8b3004c9eaeafaceaf3ce1e5acd36b01 a1bd737922479fa435687cd168280e2566d6c9a7 Begemot100 <you@example.com> 1745787438 +0200	commit: fix: добавил faiss-cpu в requirements
+a1bd737922479fa435687cd168280e2566d6c9a7 6905f89bda2b891aa108d764707136983a73156a Begemot100 <you@example.com> 1745787858 +0200	commit: fix: добавил faiss-cpu в requirements
+6905f89bda2b891aa108d764707136983a73156a 3e8c9b335a573e2a227b0c2dee08fa4d74825f9e Begemot100 <you@example.com> 1745788026 +0200	commit: fix: добавил faiss-cpu в requirements
+3e8c9b335a573e2a227b0c2dee08fa4d74825f9e 312beaa6d4c67ec5bc198e49338eec050835f643 Begemot100 <you@example.com> 1745788373 +0200	commit: fix: добавил faiss-cpu в requirements
+312beaa6d4c67ec5bc198e49338eec050835f643 a1d70ddf02edc3c35c7b8a9b56f917ace446016e Begemot100 <you@example.com> 1745789714 +0200	commit: fix: добавил faiss-cpu в requirements
+a1d70ddf02edc3c35c7b8a9b56f917ace446016e 23240461df0859fb5c2e1f13077ae7ab9b38580a Begemot100 <you@example.com> 1745790088 +0200	commit: fix: добавил faiss-cpu в requirements
+23240461df0859fb5c2e1f13077ae7ab9b38580a b6f110c7806903649b6f22b419443a27b8d1028a Begemot100 <you@example.com> 1745790385 +0200	commit: fix: add .env to .gitignore and remove from tracking
+b6f110c7806903649b6f22b419443a27b8d1028a 1ec8540a6716b8a3d65d42c228f9881d013733c7 Begemot100 <you@example.com> 1745791116 +0200	commit: fix: add .env to .gitignore and remove from tracking
+1ec8540a6716b8a3d65d42c228f9881d013733c7 a2a71da1ab052348448b35ebfb9faeb96a4804a8 Begemot100 <you@example.com> 1745791299 +0200	commit: fix: add .env to .gitignore and remove from tracking
+a2a71da1ab052348448b35ebfb9faeb96a4804a8 b6096c125b95d13ce64ef8705ff9ab6e35bfa1cb Begemot100 <you@example.com> 1745792377 +0200	commit: fix: add .env to .gitignore and remove from tracking
+b6096c125b95d13ce64ef8705ff9ab6e35bfa1cb 7eaed296109c5ed0d1d871499574602bde3696b1 Begemot100 <you@example.com> 1745792774 +0200	commit: fix: add .env to .gitignore and remove from tracking
+7eaed296109c5ed0d1d871499574602bde3696b1 26d7e386edf1728f3617c7f4940d7171ec787027 Begemot100 <you@example.com> 1745793224 +0200	commit: fix: add .env to .gitignore and remove from tracking
+26d7e386edf1728f3617c7f4940d7171ec787027 aa8782a5fd50ffe6facfd4af69a12b8da50a6f39 Begemot100 <you@example.com> 1745793638 +0200	commit: fix: add .env to .gitignore and remove from tracking
+aa8782a5fd50ffe6facfd4af69a12b8da50a6f39 ce3404422284a870fc25765bf5c9ef8badd1cf8e Begemot100 <you@example.com> 1745793803 +0200	commit: fix: add .env to .gitignore and remove from tracking
+ce3404422284a870fc25765bf5c9ef8badd1cf8e 50d7b9460d27a365b1adfe59265f7b2c9b946276 Begemot100 <you@example.com> 1745794037 +0200	commit: fix: add .env to .gitignore and remove from tracking
+50d7b9460d27a365b1adfe59265f7b2c9b946276 6383d41da7950d7ca9ac6198190fb027c2158ceb Begemot100 <you@example.com> 1745794230 +0200	commit: fix: add .env to .gitignore and remove from tracking
+6383d41da7950d7ca9ac6198190fb027c2158ceb b8ae2432bfee3d195b222a2924dd00863fa26d07 Begemot100 <you@example.com> 1745794690 +0200	commit: fix: add .env to .gitignore and remove from tracking
+b8ae2432bfee3d195b222a2924dd00863fa26d07 1ace5bd0f51adab46b4210ecfb2df95e43a455be Begemot100 <you@example.com> 1745795056 +0200	commit: fix: add .env to .gitignore and remove from tracking
+1ace5bd0f51adab46b4210ecfb2df95e43a455be f45c34e3ae5348548e475bae8668107bb29e29c0 Begemot100 <you@example.com> 1745795439 +0200	commit: fix: add .env to .gitignore and remove from tracking
+f45c34e3ae5348548e475bae8668107bb29e29c0 4854c0b20b1667a136f3f888f8f3d288da194f62 Begemot100 <you@example.com> 1745796301 +0200	commit: fix: add .env to .gitignore and remove from tracking
+4854c0b20b1667a136f3f888f8f3d288da194f62 d5ba03631b423692c85e60dacfba57a5cedd1f6c Begemot100 <you@example.com> 1745797109 +0200	commit: fix: add .env to .gitignore and remove from tracking
+d5ba03631b423692c85e60dacfba57a5cedd1f6c d646eabf37908e0dcf3264ed7e0f563a41ebb584 Begemot100 <you@example.com> 1745797605 +0200	commit: fix: add .env to .gitignore and remove from tracking
+d646eabf37908e0dcf3264ed7e0f563a41ebb584 fdcebc3bcd90339050f61ef97984bc17ac9425cc Begemot100 <you@example.com> 1745798247 +0200	commit: fix: add .env to .gitignore and remove from tracking
+fdcebc3bcd90339050f61ef97984bc17ac9425cc 5fc3dd4900e1f0166b2315ef0f442be9f8c974b8 Begemot100 <you@example.com> 1745798464 +0200	commit: fix: add .env to .gitignore and remove from tracking
+5fc3dd4900e1f0166b2315ef0f442be9f8c974b8 c33dac9068a7458c031049f49aecbea5a568b446 Begemot100 <you@example.com> 1745798771 +0200	commit: fix: add .env to .gitignore and remove from tracking
+c33dac9068a7458c031049f49aecbea5a568b446 65271cfe64b6123589bb6c6220aedaff98dbadbe Begemot100 <you@example.com> 1745800360 +0200	commit: fix: add .env to .gitignore and remove from tracking
